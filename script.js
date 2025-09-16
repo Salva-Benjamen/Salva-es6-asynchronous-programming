@@ -1,6 +1,4 @@
-const fs = require('fs');
-
-// Part 1: ES6 Classes
+// ====== ES6 Classes ======
 class Student {
   constructor(id, name, age, course) {
     this.id = id;
@@ -26,43 +24,94 @@ class Instructor {
   }
 }
 
-// Read JSON and process data
-fs.readFile('students.json', 'utf8', (err, jsonString) => {
-  if (err) {
-    console.error("Failed to read file:", err);
-    return;
-  }
+// ====== Fetch with Promises (.then) ======
+function fetchWithPromises() {
+  fetch('data/students.json')
+    .then(res => res.json())
+    .then(data => {
+      console.log('Using Promises:', data);
+    })
+    .catch(err => console.error(err));
+}
+
+// ====== Fetch with Async/Await ======
+async function fetchWithAsync() {
   try {
-    const data = JSON.parse(jsonString);
-
-    // Create objects
-    const studentObjects = data.students.map(
-      s => new Student(s.id, s.name, s.age, s.course)
-    );
-    const instructorObjects = data.instructors.map(
-      i => new Instructor(i.id, i.name, i.subject)
-    );
-
-    // Display Students
-    console.log("Students:");
-    studentObjects.forEach(s => {
-      const star = s.age > 21 ? " *" : "";
-      console.log(`- ${s.name} (${s.age}) - ${s.course}${star}`);
-    });
-
-    // Display Courses
-    console.log("\nCourses:");
-    data.courses.forEach(course => {
-      console.log(`- ${course.title}: ${course.description}`);
-    });
-
-    // Display Instructors
-    console.log("\nInstructors:");
-    instructorObjects.forEach(instr => {
-      console.log(`- ${instr.name} - ${instr.subject}`);
-    });
-
-  } catch (parseErr) {
-    console.error("Failed to parse JSON:", parseErr);
+    const res = await fetch('data/students.json');
+    const data = await res.json();
+    console.log('Using Async/Await:', data);
+    processData(data);
+  } catch (err) {
+    console.error(err);
   }
-});
+}
+
+// ====== Process & Display Data ======
+function processData(data) {
+  const output = document.getElementById('output');
+
+  // Create Student and Instructor objects
+  const studentObjs = data.students.map(
+    s => new Student(s.id, s.name, s.age, s.course)
+  );
+
+  const instructorObjs = data.instructors.map(
+    i => new Instructor(i.id, i.name, i.subject)
+  );
+
+  // Display Students
+  const studentList = document.createElement('div');
+  studentList.innerHTML = `<h2>Students</h2>`;
+  studentObjs.forEach(student => {
+    const p = document.createElement('p');
+    p.innerHTML = student.introduce();
+    if (student.age > 21) p.classList.add('bold');
+    studentList.appendChild(p);
+  });
+  output.appendChild(studentList);
+
+  // Display Courses
+  const courseList = document.createElement('div');
+  courseList.innerHTML = `<h2>Courses</h2>`;
+  data.courses.forEach(course => {
+    const p = document.createElement('p');
+    p.innerHTML = `<strong>${course.title}</strong>: ${course.description}`;
+    courseList.appendChild(p);
+  });
+  output.appendChild(courseList);
+
+  // Display Instructors
+  const instructorList = document.createElement('div');
+  instructorList.innerHTML = `<h2>Instructors</h2>`;
+  instructorObjs.forEach(inst => {
+    const p = document.createElement('p');
+    p.innerHTML = inst.teach();
+    instructorList.appendChild(p);
+  });
+  output.appendChild(instructorList);
+
+  // Data Relationships
+  const relationDiv = document.createElement('div');
+  relationDiv.innerHTML = `<h2>Data Relationships</h2>`;
+
+  studentObjs.forEach(student => {
+    const course = data.courses.find(c => c.title === student.course);
+    const p = document.createElement('p');
+    p.textContent = `${student.name} → ${student.course} → ${course.description}`;
+    relationDiv.appendChild(p);
+  });
+
+  data.courses.forEach(course => {
+    if (course.instructor !== 'N/A') {
+      const p = document.createElement('p');
+      p.textContent = `${course.title} → Taught by ${course.instructor}`;
+      relationDiv.appendChild(p);
+    }
+  });
+
+  output.appendChild(relationDiv);
+}
+
+// ====== Run Code ======
+fetchWithPromises();
+fetchWithAsync();

@@ -1,0 +1,41 @@
+{
+  "students": [
+    { "id": 1, "name": "Elena", "age": 19, "course": "Software Engineering" },
+    { "id": 2, "name": "Ravi", "age": 22, "course": "Artificial Intelligence" },
+    { "id": 3, "name": "Chloe", "age": 20, "course": "Cybersecurity" },
+    { "id": 4, "name": "Omar", "age": 23, "course": "Data Analytics" },
+    { "id": 5, "name": "Mia", "age": 21, "course": "Game Development" }
+  ],
+  "instructors": [
+    { "id": 1, "name": "Sarah Newton", "subject": "Advanced Software Design" },
+    { "id": 2, "name": "Liam Chen", "subject": "Machine Learning Applications" },
+    { "id": 3, "name": "Aisha Yusuf", "subject": "Cybersecurity Essentials" }
+  ],
+  "courses": [
+    {
+      "title": "Software Engineering",
+      "description": "Design and development of robust software systems.",
+      "instructor": "Sarah Newton"
+    },
+    {
+      "title": "Artificial Intelligence",
+      "description": "Study of intelligent agents, neural networks, and machine learning.",
+      "instructor": "Liam Chen"
+    },
+    {
+      "title": "Cybersecurity",
+      "description": "Securing data, networks, and systems from digital attacks.",
+      "instructor": "Aisha Yusuf"
+    },
+    {
+      "title": "Data Analytics",
+      "description": "Extracting insights from structured and unstructured data.",
+      "instructor": "Liam Chen"
+    },
+    {
+      "title": "Game Development",
+      "description": "Creating interactive games using game engines and programming.",
+      "instructor": "Sarah Newton"
+    }
+  ]
+}
